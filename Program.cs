@@ -13,12 +13,13 @@ app.MapPost("/upload", async (
     if (key != configKey)
     {
         context.Response.StatusCode = 401;
+        logger.LogWarning($"Unauthorized access from \"{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort}\"");
         return "Unauthorized";
     }
     var filePath = Path.Combine(configUploadPath, usedFileName);
     await using var fileStream = File.Create(filePath);
     await context.Request.Body.CopyToAsync(fileStream);
-    logger.LogInformation($"Uploaded file to '{filePath}'");
+    logger.LogInformation($"Uploaded file from \"{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort}\" to \"{filePath}\"");
     return "OK";
 });
 

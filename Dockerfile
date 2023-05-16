@@ -10,6 +10,12 @@ COPY . .
 RUN dotnet publish --use-current-runtime --no-restore -o /app /p:PublishTrimmed=true /p:PublishReadyToRun=true
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:7.0-alpine
+LABEL org.opencontainers.image.source=https://github.com/KarolisKundrotas-Hostinger/upldr
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_UploadPath=/app/uploads
+ENV ASPNETCORE_Key=changeme
+
 WORKDIR /app
 COPY --from=build /app .
 
