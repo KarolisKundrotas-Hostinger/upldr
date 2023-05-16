@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,10 @@ app.MapPost("/upload", async (
         context.Response.StatusCode = 401;
         logger.LogWarning($"Unauthorized access from \"{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort}\"");
         return "Unauthorized";
+    }
+    if (context.Features.Get<IHttpMaxRequestBodySizeFeature>() is { } maxRequestBodySizeFeature)
+    {
+        maxRequestBodySizeFeature.MaxRequestBodySize = null;
     }
     var filePath = Path.Combine(configUploadPath, usedFileName);
     await using var fileStream = File.Create(filePath);
