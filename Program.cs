@@ -23,4 +23,6 @@ app.MapPost("/upload", async (
     return "OK";
 });
 
+app.MapGet("/", () => "OK");
+
 app.Run();
