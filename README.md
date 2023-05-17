@@ -14,5 +14,5 @@ curl --data-binary '@filetoupload.txt' -X POST -H 'X-Key: changeme' -H 'X-File-N
 | -------- | ----------- | ------------- |
 | `DOTNET_ENVIRONMENT` | Environment name | `Production` |
 | `DOTNET_URLS` | Urls to listen to | `http://+:80` |
-| `DOTNET_UploadPath` | Path where to store uploaded files | `/app/uploads` |
-| `DOTNET_Key` | Key used to authenticate | `changeme` |
+| `UploadPath` | Path where to store uploaded files | `/app/uploads` |
+| `Key` | Key used to authenticate | `changeme` |

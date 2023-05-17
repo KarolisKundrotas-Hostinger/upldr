@@ -21,7 +21,15 @@ app.MapPost("/upload", async (
     {
         maxRequestBodySizeFeature.MaxRequestBodySize = null;
     }
+    var directory = Path.GetFullPath(configUploadPath);
     var filePath = Path.Combine(configUploadPath, usedFileName);
+    var effectivePath = Path.GetFullPath(filePath);
+    if (!effectivePath.StartsWith(directory))
+    {
+        context.Response.StatusCode = 403;
+        logger.LogWarning($"Forbidden access, due to path traversal, from \"{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort}\" to \"{filePath}\"");
+        return "Forbidden";
+    }
     await using var fileStream = File.Create(filePath);
     await context.Request.Body.CopyToAsync(fileStream);
     logger.LogInformation($"Uploaded file from \"{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort}\" to \"{filePath}\"");
